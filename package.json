@@ -1,0 +1,8 @@
+{
+  "name": "watch-party-monorepo",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ]
+}

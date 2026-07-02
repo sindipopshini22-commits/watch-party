@@ -1,0 +1,70 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum VideoSource {
+  YOUTUBE
+  DIRECT_MP4
+}
+
+model Movie {
+  id            String      @id @default(uuid())
+  title         String
+  overview      String
+  release_year  Int
+  poster_url    String
+  backdrop_url  String?
+  video_source  VideoSource
+  source_id     String      @unique
+  created_at    DateTime    @default(now()) @map("created_at")
+  updated_at    DateTime    @updatedAt @map("updated_at")
+
+  rooms Room[]
+  seasons Season[]
+
+  @@map("movies")
+}
+
+model Season {
+  id        String @id @default(uuid())
+  number    Int
+  title     String?
+  movie_id  String
+  movie     Movie  @relation(fields: [movie_id], references: [id])
+  episodes  Episode[]
+
+  @@map("seasons")
+}
+
+model Episode {
+  id            String      @id @default(uuid())
+  number        Int
+  title         String
+  overview      String?
+  air_date      String?
+  video_source  VideoSource
+  source_id     String
+  season_id     String
+  season        Season      @relation(fields: [season_id], references: [id])
+
+  @@map("episodes")
+}
+
+model Room {
+  id                 String    @id @default(uuid())
+  host_id            String
+  current_movie_id   String
+  current_movie      Movie     @relation(fields: [current_movie_id], references: [id])
+  current_episode_id String?
+  is_playing         Boolean   @default(false)
+  current_timestamp  Float     @default(0.0)
+  created_at         DateTime  @default(now()) @map("created_at")
+  updated_at         DateTime  @updatedAt @map("updated_at")
+
+  @@map("rooms")
+}

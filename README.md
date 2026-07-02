@@ -1,6 +1,7 @@
 # Watch Party
 
 A full-stack watch-party web app with synchronized playback, live video chat, and social sharing.
+live deployed<<<<< https://watchplaysindi.netlify.app/
 
 ## Screenshots
 
